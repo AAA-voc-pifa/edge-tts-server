@@ -1,0 +1,7 @@
+[project]
+name = "edge-tts-server"
+version = "0.1.1"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.141.1",
+]
