@@ -15,6 +15,4 @@ async def m():
 	print(set(language))
 	perf()
 
-
-
 asyncio.run(m())

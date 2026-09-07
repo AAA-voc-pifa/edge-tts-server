@@ -1,4 +1,4 @@
-from edge_tts import VoicesManager
+from edge_tts import VoicesManager, Communicate
 
 class VoiceMNG:
 	def __init__(self):
@@ -12,3 +12,8 @@ class VoiceMNG:
 		return (await self.m()).find(**kwargs)
 
 voice_mng = VoiceMNG()
+
+async def tts_stream(text: str, voice: str) -> bytes:
+	async for chunk in Communicate(text, voice).stream():
+		if chunk['type'] == 'audio':
+			yield chunk['data']
