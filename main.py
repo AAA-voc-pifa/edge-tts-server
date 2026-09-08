@@ -21,4 +21,7 @@ async def tts(text: str, voice: str):
 	return StreamingResponse(
 		tts_stream(text, voice),
 		media_type='audio/mpeg',
+		headers={
+			'Cache-Control': 'public, max-age=86400',
+		},
 	)
