@@ -11,6 +11,6 @@ def make_verify():
 		if password != pw:
 			raise HTTPException(
 				status_code=status.HTTP_403_FORBIDDEN,
-				detail='密码错误'
+				detail='密码错误',
 			)
 	return Depends(verify)
