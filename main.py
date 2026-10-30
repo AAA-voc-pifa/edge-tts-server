@@ -24,11 +24,13 @@ async def all_voices(req: Request) -> list[VoicesManagerVoice]:
 		**dict(req.query_params)
 	)
 
-@app.get('/tts')
+class AudioMpegResponse(StreamingResponse):
+	media_type = 'audio/mpeg'
+
+@app.get('/tts', response_class=AudioMpegResponse)
 async def tts(text: str, voice: str):
-	return StreamingResponse(
+	return AudioMpegResponse(
 		tts_stream(text, voice),
-		media_type='audio/mpeg',
 		headers={
 			'Cache-Control': 'public, max-age=86400',
 		},
