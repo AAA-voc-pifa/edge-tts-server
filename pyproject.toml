@@ -3,7 +3,7 @@ name = "edge-tts-server"
 version = "0.1.1"
 requires-python = ">=3.13"
 dependencies = [
-    "edge-tts>=7.2.8",
+    "edge-tts>=7.3.1",
     "fastapi[standard]>=0.141.1",
     "pydantic>=2.13.5",
 ]

@@ -2,8 +2,6 @@
 
 把 [edge-tts](https://github.com/rany2/edge-tts)（微软 Edge 在线语音合成）包成 **HTTP API**。
 
-> **许可说明：** 本项目代码可自由使用；依赖库 [edge-tts](https://github.com/rany2/edge-tts) 采用 **GPL-3.0**。若你分发或商用集成该库，请注意 GPL 合规要求。
-
 ## Docs
 
 1. 启动测试服务器
