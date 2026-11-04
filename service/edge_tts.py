@@ -13,7 +13,7 @@ class VoiceMNG:
 
 voice_mng = VoiceMNG()
 
-async def tts_stream(text: str, voice: str) -> bytes:
-	async for chunk in Communicate(text, voice).stream():
+async def tts_stream(text: str, voice: str, rate: str = '+0%') -> bytes:
+	async for chunk in Communicate(text, voice, rate=rate).stream():
 		if chunk['type'] == 'audio':
 			yield chunk['data']
