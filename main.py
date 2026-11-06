@@ -1,3 +1,4 @@
+import logging
 from typing import Annotated
 from fastapi import FastAPI, Request, Query, status
 from fastapi.responses import StreamingResponse
@@ -5,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from service.edge_tts import voice_mng, tts_stream
 from edge_tts.typing import VoicesManagerVoice
 from service.auth import make_verify
+
+log = logging.getLogger('uvicorn.error')
 
 app = FastAPI(
 	title='edge-tts-server',
@@ -57,6 +60,7 @@ async def tts(
 		pattern=r'^[+-]\d+%$',
 	)] = '+0%',
 ):
+	log.info('合成: %s', text)
 	return AudioMpegResponse(
 		tts_stream(text, voice, rate),
 		headers={
