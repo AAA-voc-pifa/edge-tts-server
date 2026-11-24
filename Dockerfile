@@ -13,6 +13,6 @@ COPY main.py ./
 COPY service ./service
 RUN uv sync --frozen
 
-EXPOSE 8000
+EXPOSE 80
 
-CMD ["uv", "run", "fastapi", "run", "main.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "fastapi", "run", "main.py", "--host", "0.0.0.0", "--port", "80"]
