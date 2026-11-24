@@ -1,0 +1,9 @@
+.venv
+.git
+__pycache__
+*.py[oc]
+*.egg-info
+output.mp3
+README.md
+.gitignore
+.python-version

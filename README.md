@@ -15,3 +15,13 @@ uv sync
 source .venv/bin/activate
 fastapi dev
 ```
+
+## Docker
+
+``` bash
+docker build -t edge-tts-server .
+docker run --rm \
+	-p 60001:8000 \
+	-e password=123456 \
+	edge-tts-server
+```
