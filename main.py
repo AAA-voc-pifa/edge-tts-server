@@ -1,6 +1,6 @@
 import logging
-from typing import Annotated
-from fastapi import FastAPI, Request, Query, status
+from typing import Annotated, Literal
+from fastapi import FastAPI, Query, status
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from service.edge_tts import voice_mng, tts_stream
@@ -36,12 +36,21 @@ async def auth() -> None:
 @app.get(
 	'/voice',
 	summary='查询音色',
-	description='支持按 Locale、Gender、ShortName 等字段筛选，参数与 edge-tts VoicesManager.find 一致。',
+	description='可按 gender、locale、language 过滤。',
 )
-async def all_voices(req: Request) -> list[VoicesManagerVoice]:
-	return await voice_mng.find(
-		**dict(req.query_params)
-	)
+async def all_voices(
+	gender: Annotated[Literal['Female', 'Male'] | None, Query(description='性别：Female / Male')] = None,
+	locale: Annotated[str | None, Query(description='地区，如 zh-CN、en-US')] = None,
+	language: Annotated[str | None, Query(description='语言，如 zh、en')] = None,
+) -> list[VoicesManagerVoice]:
+	filters = {}
+	if gender is not None:
+		filters['Gender'] = gender
+	if locale is not None:
+		filters['Locale'] = locale
+	if language is not None:
+		filters['Language'] = language
+	return await voice_mng.find(**filters)
 
 class AudioMpegResponse(StreamingResponse):
 	media_type = 'audio/mpeg'
