@@ -8,27 +8,35 @@ from edge_tts.typing import VoicesManagerVoice
 from service.auth import make_verify
 
 log = logging.getLogger('uvicorn.error')
+verify = make_verify()
 
 app = FastAPI(
 	title='edge-tts-server',
-	description='微软 Edge 在线语音合成 HTTP API。所有接口需在请求头携带 `password`。',
-	dependencies=[
-		make_verify(),
-	],
+	description='微软 Edge 在线语音合成 HTTP API。受保护接口需在请求头携带 `Authentication`。',
 )
 app.add_middleware(
 	CORSMiddleware,
 	allow_origins=['*'],
-	allow_credentials=True,
+	allow_credentials=False,
 	allow_methods=['*'],
 	allow_headers=['*'],
 )
 
 @app.get(
+	'/ready',
+	status_code=status.HTTP_200_OK,
+	summary='就绪检查',
+	description='始终返回 200，无需鉴权。',
+)
+async def ready() -> None:
+	return None
+
+@app.post(
 	'/auth',
 	status_code=status.HTTP_204_NO_CONTENT,
 	summary='验证密码',
-	description='仅校验请求头 `password`，成功无响应体。',
+	description='仅校验请求头 `Authentication`，成功无响应体。',
+	dependencies=[verify],
 )
 async def auth() -> None:
 	return None
@@ -37,6 +45,7 @@ async def auth() -> None:
 	'/voice',
 	summary='查询音色',
 	description='可按 gender、locale、language 过滤。',
+	dependencies=[verify],
 )
 async def all_voices(
 	gender: Annotated[Literal['Female', 'Male'] | None, Query(description='性别：Female / Male')] = None,
@@ -60,6 +69,7 @@ class AudioMpegResponse(StreamingResponse):
 	response_class=AudioMpegResponse,
 	summary='文本转语音',
 	description='流式返回 MP3（audio/mpeg）。',
+	dependencies=[verify],
 )
 async def tts(
 	text: Annotated[str, Query(description='要合成的文本')],
